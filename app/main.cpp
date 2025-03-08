@@ -1,10 +1,8 @@
-#include "notesmenu/notes_menu.h"
 #include "notesdrawing/notes_drawing.h"
 #include <cstdlib>
-using namespace notesmenu;
 using namespace notesdrawing;
 int main(){
-  NotesDrawing d;
-  d.NotesLayout();
+    NotesDrawing d;
+    d.Display();
   return EXIT_SUCCESS;
 };

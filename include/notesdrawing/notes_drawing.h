@@ -3,6 +3,6 @@ namespace notesdrawing{
   class NotesDrawing{
   public:
   NotesDrawing();
-  void NotesLayout();
+  void Display();
 };
 }

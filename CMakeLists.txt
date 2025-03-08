@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.14)
 project(NotesMinimalist)
 find_package(ftxui 5 REQUIRED)
 set(SOURCES          # All .cpp files in src/
-    src/notes_menu.cpp
     src/notes_drawing.cpp
 )
 set(LIBRARY_NAME engine)  # Default name for the library built from src/*.cpp (change if you wish)
