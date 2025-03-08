@@ -1,9 +1,10 @@
-#include "menu/menu.h"
-using namespace menu;
-
+#include "notesmenu/notes_menu.h"
+#include "notesdrawing/notes_drawing.h"
+#include <cstdlib>
+using namespace notesmenu;
+using namespace notesdrawing;
 int main(){
-  Menu m = Menu();
-  m.display();
-  m.test();
-  return 0;
+  NotesDrawing d;
+  d.NotesLayout();
+  return EXIT_SUCCESS;
 };
