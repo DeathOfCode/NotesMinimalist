@@ -8,30 +8,72 @@
 #include <ftxui/component/component_options.hpp>
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
-using namespace notesdrawing;
+#include <vector>
+#include <iostream>
+
 using namespace ftxui;
 
-NotesDrawing::NotesDrawing(){};
 void NotesDrawing::Display(){
   std::vector<std::string> menuItems = {
-    "Add note",
-    "Notes list",
+    "New note",
+    "Sort order",
     "Exit"
   };
-  int selected = 0;
- // MenuOption option;
-  Component listmenu = Menu(&menuItems,&selected);
+  std::vector<std::string> noteItems = {
+    "note 1",
+    "note 2",
+    "note 3"
+  };
 
-   auto layout = Container::Horizontal({
-    listmenu,
+  int selected_menu = 0;
+  int selected_note = 0;
+  int selected_tab = 0;
+  int selected_tab_input = 1;
+  std::string write_note;
+  std::string write_note_1;
+
+ auto tab_input_container = Container::Tab(
+      {
+        Input(&write_note, "Add note..."),
+        Input(&write_note_1, "Add note111111...")
+      },
+      &selected_note);
+ 
+
+  auto tab_note_container = Container::Tab(
+      {
+      Menu(&noteItems,&selected_note)
+      },
+      &selected_tab);
+ 
+  auto component_list_menu = Toggle(&menuItems, &selected_menu);
+  auto layoutMenu = Container::Vertical({component_list_menu, tab_note_container, tab_input_container});
+ 
+  auto layoutLeft = Renderer(layoutMenu, [&] {
+    return vbox({
+               component_list_menu->Render(),
+               separator(),
+               tab_note_container->Render(),
+           });
   });
-  auto component = Renderer(layout, [&]{
+
+  auto renderer = Renderer(layoutLeft, [&]{
     return hbox({
-      listmenu->Render() | size(ftxui::WIDTH, ftxui::EQUAL,30),
-      separator(),
+     layoutLeft->Render(),
+       separator(),
+     tab_input_container->Render()  
     }) | border;
-    }); 
-   auto screen = ScreenInteractive::Fullscreen();
-   screen.Loop(component);
+    });
+auto screen = ScreenInteractive::TerminalOutput();
+
+renderer |= CatchEvent([&](Event event) {
+  if (event == Event::Character('\n')) {
+    screen.ExitLoopClosure()();
+    return true;
+  }
+  return false;
+});
+     
+  screen.Loop(renderer);  
 }
 
