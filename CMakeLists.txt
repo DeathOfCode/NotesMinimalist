@@ -3,6 +3,7 @@ project(NotesMinimalist)
 find_package(ftxui 6 REQUIRED)
 set(SOURCES          # All .cpp files in src/
     src/notes_drawing.cpp
+    src/input_note.cpp
 )
 set(LIBRARY_NAME engine)  # Default name for the library built from src/*.cpp (change if you wish)
 set(CMAKE_CXX_STANDARD 17)

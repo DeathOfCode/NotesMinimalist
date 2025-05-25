@@ -1,4 +1,5 @@
 #include "notesdrawing/notes_drawing.h"
+#include "components/input_note.h"
 #include <ftxui/component/component_base.hpp>
 #include <cstdio>
 #include <ftxui/dom/elements.hpp>
@@ -14,16 +15,13 @@
 using namespace ftxui;
 
 void NotesDrawing::Display(){
+  
   std::vector<std::string> menuItems = {
     "New note",
     "Sort order",
     "Exit"
   };
-  std::vector<std::string> noteItems = {
-    "note 1",
-    "note 2",
-    "note 3"
-  };
+  std::vector<std::string> noteItems = {};
 
   int selected_menu = 0;
   int selected_note = 0;
@@ -31,15 +29,11 @@ void NotesDrawing::Display(){
   int selected_tab_input = 1;
   std::string write_note;
   std::string write_note_1;
-
- auto tab_input_container = Container::Tab(
-      {
-        Input(&write_note, "Add note..."),
-        Input(&write_note_1, "Add note111111...")
-      },
-      &selected_note);
+  auto tab_input_container = Container::Tab({},&selected_note);
  
-
+ //tab_input_container->Add(Input(write_note,"Add note test..."));
+ //tab_input_container->Add(Input(write_note_1,"Add note111 test..."));
+  
   auto tab_note_container = Container::Tab(
       {
       Menu(&noteItems,&selected_note)
@@ -67,13 +61,25 @@ void NotesDrawing::Display(){
 auto screen = ScreenInteractive::TerminalOutput();
 
 renderer |= CatchEvent([&](Event event) {
-  if (event == Event::Character('\n')) {
-    screen.ExitLoopClosure()();
+  if (event == Event::Character('\n') && selected_menu == 0) {
+   // screen.ExitLoopClosure()();
+      noteItems.push_back("untitled");
+     // InputNote input_note;
+    //  ftxui::Component input = input_note.GetInputNote();
+    //  tab_input_container->Add(input);
+      NotesDrawing::AddInputNote(tab_input_container);
+      auto sizeNote = noteItems.size();
+      selected_note = sizeNote;
     return true;
   }
   return false;
-});
-     
+}); 
   screen.Loop(renderer);  
+}
+
+void NotesDrawing::AddInputNote(ftxui::Component& tab){
+     InputNote input_note;
+     ftxui::Component input = input_note.GetInputNote();
+     tab->Add(input);
 }
 
